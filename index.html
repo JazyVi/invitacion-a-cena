@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Invitación a Cena</title>
+  <title>Una invitación silenciosa</title>
   <style>
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -12,43 +13,44 @@
 
     body {
       margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: #000;
-      background-image: url("fondo.png");
+      font-family: 'Georgia', serif;
+      background-color: #fdfaf6;
+      background-image: url('fondo-washi.png');
       background-size: cover;
       background-position: center;
-      backdrop-filter: blur(3px);
-      color: #fff;
+      backdrop-filter: blur(2px);
+      color: #5e0e1b;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
-      padding: 1rem;
+      padding: 2rem;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.6);
+    .container, .step2, .message-box {
+      background: rgba(255, 255, 255, 0.8);
       padding: 2rem;
       border-radius: 1rem;
       max-width: 500px;
-      box-shadow: 0 4px 12px rgba(255,255,255,0.2);
-      animation: fadeIn 1.5s ease-in-out;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      animation: fadeIn 2s ease-in-out;
     }
 
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-bottom: 1rem;
     }
 
     p {
       margin-bottom: 1rem;
       font-size: 1rem;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     button {
-      background-color: #c93f4c;
+      background-color: #8b1e3f;
       color: white;
       border: none;
       padding: 0.8rem 1.2rem;
@@ -60,88 +62,78 @@
     }
 
     button:hover {
-      background-color: #a42c38;
+      background-color: #6e152f;
     }
 
-    .response, .egg {
+    .hidden {
+      display: none;
+    }
+
+    .egg {
       margin-top: 1rem;
       font-style: italic;
       display: none;
-      animation: fadeIn 1.5s ease-in-out;
-    }
-
-    .fade-in {
-      display: block;
-      animation: fadeIn 1.5s ease-in-out;
-    }
-
-    .fecha {
-      display: none;
+      animation: fadeIn 2s ease-in-out;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="step1">
     <h1>Hola Alain.</h1>
     <p>
-      A veces el código se corrompe con emociones.<br/>
-      Esta vez, solo quiero invitarte a una cena hecha con calma y gratitud.<br/>
-      Sin palabras, sin presiones.<br/>
-      Solo tú, yo, y unos platos bien pensados.
+      Esta es una función silenciosa de gratitud.<br/>
+      No es una cita, ni una vuelta atrás.<br/>
+      Es una cena sin palabras, hecha con dedicación.<br/>
+      ¿Ejecutarías esta cena.exe conmigo?
     </p>
-
-    <p>¿Ejecutarías una cena.exe conmigo?</p>
-    <button onclick="responder('si')">Sí, inicializa</button>
-    <button onclick="responder('no')">No, abortar misión</button>
-
-    <div id="selectorFechas" class="fecha">
-      <p>Selecciona el script de fecha:</p>
-      <form name="cena-form" method="POST" data-netlify="true">
-        <input type="hidden" name="respuesta" id="respuestaSeleccion" />
-        <button type="submit" onclick="elegirFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
-        <button type="submit" onclick="elegirFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
-      </form>
-    </div>
-
-    <div id="respuesta" class="response"></div>
-    <div id="easterEgg" class="egg"></div>
+    <button onclick="aceptar()">Sí, inicializa</button>
+    <button onclick="rechazar()">No, abortar misión</button>
   </div>
+
+  <div class="step2 hidden" id="step2">
+    <p>Elige la fecha en que quieras ejecutar la función:</p>
+    <form name="invitacion" method="POST" data-netlify="true">
+      <input type="hidden" name="respuesta" id="respuestaSeleccion" />
+      <button type="submit" onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
+      <button type="submit" onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
+    </form>
+  </div>
+
+  <div class="message-box hidden" id="respuesta"></div>
+  <div id="easterEgg" class="egg"></div>
 
   <audio id="sonidoAceptar" src="https://cdn.pixabay.com/audio/2023/03/22/audio_2d095e760b.mp3"></audio>
   <audio id="sonidoRechazo" src="https://cdn.pixabay.com/audio/2022/03/26/audio_1ef21a3a42.mp3"></audio>
 
   <script>
-    function responder(respuesta) {
-      const selector = document.getElementById('selectorFechas');
-      const div = document.getElementById('respuesta');
-      const sonidoAceptar = document.getElementById('sonidoAceptar');
-      const sonidoRechazo = document.getElementById('sonidoRechazo');
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const respuestaDiv = document.getElementById("respuesta");
+    const egg = document.getElementById("easterEgg");
 
-      if (respuesta === 'si') {
-        selector.style.display = "block";
-        div.style.display = "none";
-        sonidoAceptar.play();
-      } else {
-        selector.style.display = "none";
-        div.innerHTML = "De lo que te pierdes 💔";
-        div.className = "response fade-in";
-        sonidoRechazo.play();
-        document.getElementById("respuestaSeleccion").value = "❌ No, Alain ha rechazado la cena.";
-      }
+    function aceptar() {
+      document.getElementById("sonidoAceptar").play();
+      step1.classList.add("hidden");
+      step2.classList.remove("hidden");
     }
 
-    function elegirFecha(fecha) {
-      const div = document.getElementById('respuesta');
+    function rechazar() {
+      document.getElementById("sonidoRechazo").play();
+      step1.classList.add("hidden");
+      respuestaDiv.innerHTML = "De lo que te pierdes 💔";
+      respuestaDiv.classList.remove("hidden");
+    }
+
+    function seleccionarFecha(fecha) {
       document.getElementById("respuestaSeleccion").value = "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
-      div.innerHTML = "Gracias por aceptar esta pequeña función de paz.<br/>La cena será en mi casa el " + fecha + ".";
-      div.className = "response fade-in";
+      respuestaDiv.innerHTML = "Nos vemos el " + fecha + ". Gracias por tu tiempo y curiosidad 🍃";
+      respuestaDiv.classList.remove("hidden");
     }
 
     document.addEventListener('keydown', function(e) {
       if (e.key.toLowerCase() === 'a') {
-        const egg = document.getElementById('easterEgg');
         egg.innerHTML = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
-        egg.className = "egg fade-in";
+        egg.style.display = "block";
       }
     });
   </script>
