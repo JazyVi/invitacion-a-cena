@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invitación a Cena</title>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #000;
+      background-image: url("fondo.png");
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(3px);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    button {
+      background-color: #c93f4c;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      margin: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #a42c38;
+    }
+
+    .response, .egg {
+      margin-top: 1rem;
+      font-style: italic;
+      display: none;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .fade-in {
+      display: block;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .fecha {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hola Alain.</h1>
+    <p>
+      A veces el código se corrompe con emociones.<br/>
+      Esta vez, solo quiero invitarte a una cena hecha con calma y gratitud.<br/>
+      Sin palabras, sin presiones.<br/>
+      Solo tú, yo, y unos platos bien pensados.
+    </p>
+
+    <p>¿Ejecutarías una cena.exe conmigo?</p>
+    <button onclick="responder('si')">Sí, inicializa</button>
+    <button onclick="responder('no')">No, abortar misión</button>
+
+    <div id="selectorFechas" class="fecha">
+      <p>Selecciona el script de fecha:</p>
+      <form name="cena-form" method="POST" data-netlify="true">
+        <input type="hidden" name="respuesta" id="respuestaSeleccion" />
+        <button type="submit" onclick="elegirFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
+        <button type="submit" onclick="elegirFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
+      </form>
+    </div>
+
+    <div id="respuesta" class="response"></div>
+    <div id="easterEgg" class="egg"></div>
+  </div>
+
+  <audio id="sonidoAceptar" src="https://cdn.pixabay.com/audio/2023/03/22/audio_2d095e760b.mp3"></audio>
+  <audio id="sonidoRechazo" src="https://cdn.pixabay.com/audio/2022/03/26/audio_1ef21a3a42.mp3"></audio>
+
+  <script>
+    function responder(respuesta) {
+      const selector = document.getElementById('selectorFechas');
+      const div = document.getElementById('respuesta');
+      const sonidoAceptar = document.getElementById('sonidoAceptar');
+      const sonidoRechazo = document.getElementById('sonidoRechazo');
+
+      if (respuesta === 'si') {
+        selector.style.display = "block";
+        div.style.display = "none";
+        sonidoAceptar.play();
+      } else {
+        selector.style.display = "none";
+        div.innerHTML = "De lo que te pierdes 💔";
+        div.className = "response fade-in";
+        sonidoRechazo.play();
+        document.getElementById("respuestaSeleccion").value = "❌ No, Alain ha rechazado la cena.";
+      }
+    }
+
+    function elegirFecha(fecha) {
+      const div = document.getElementById('respuesta');
+      document.getElementById("respuestaSeleccion").value = "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
+      div.innerHTML = "Gracias por aceptar esta pequeña función de paz.<br/>La cena será en mi casa el " + fecha + ".";
+      div.className = "response fade-in";
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key.toLowerCase() === 'a') {
+        const egg = document.getElementById('easterEgg');
+        egg.innerHTML = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
+        egg.className = "egg fade-in";
+      }
+    });
+  </script>
+
+  <!--
+  Gracias por mirar el código. 
+  Así como tú, todo lo bueno está detrás de lo obvio.
+  -->
+
+  <!--
+  Si estás leyendo esto... entonces te importó mirar más allá.  
+  Como en la vida, lo esencial a veces no está visible a simple vista.
+  Nos vemos el día que elijas.
+  -->
+</body>
+</html>
