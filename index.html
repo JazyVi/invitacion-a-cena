@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,15 +9,9 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-
     body {
       margin: 0;
       font-family: 'Georgia', serif;
-      background-color: #fdfaf6;
-      background-image: url('fondo-washi.png');
-      background-size: cover;
-      background-position: center;
-      backdrop-filter: blur(2px);
       color: #5e0e1b;
       display: flex;
       flex-direction: column;
@@ -27,65 +20,56 @@
       min-height: 100vh;
       text-align: center;
       padding: 2rem;
+      position: relative;
+      overflow: hidden;
     }
-
+    video#fondo-video {
+      position: fixed;
+      top: 0; left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.6) blur(1px);
+    }
     .container, .step2, .message-box {
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.75);
       padding: 2rem;
       border-radius: 1rem;
       max-width: 500px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       animation: fadeIn 2s ease-in-out;
     }
-
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 1rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      line-height: 1.6;
-    }
-
+    h1 { font-size: 1.6rem; margin-bottom: 1rem; }
+    p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.6; }
     button {
-      background-color: #8b1e3f;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      margin: 0.5rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-size: 1rem;
+      background-color: #8b1e3f; color: white; border: none;
+      padding: 0.8rem 1.2rem; margin: 0.5rem;
+      border-radius: 0.5rem; cursor: pointer; font-size: 1rem;
       transition: background 0.3s ease;
     }
-
-    button:hover {
-      background-color: #6e152f;
-    }
-
-    .hidden {
-      display: none;
-    }
-
+    button:hover { background-color: #6e152f; }
+    .hidden { display: none; }
     .egg {
-      margin-top: 1rem;
-      font-style: italic;
-      display: none;
-      animation: fadeIn 2s ease-in-out;
+      margin-top: 1rem; font-style: italic;
+      display: none; animation: fadeIn 2s ease-in-out;
     }
   </style>
 </head>
 <body>
+  <video autoplay muted loop id="fondo-video">
+    <source src="fondo-luna.mp4" type="video/mp4" />
+  </video>
+
   <div class="container" id="step1">
     <h1>Hola Alain.</h1>
     <p>
-      Esta es una función silenciosa de gratitud.<br/>
-      No es una cita, ni una vuelta atrás.<br/>
-      Es una cena sin palabras, hecha con dedicación.<br/>
-      ¿Ejecutarías esta cena.exe conmigo?
+      A veces el código se corrompe con emociones.<br/>
+      Esta vez, solo quiero invitarte a una cena hecha con calma y gratitud.<br/>
+      Sin palabras, sin presiones.<br/>
+      Solo tú, yo, y unos platos bien pensados.
     </p>
+    <p>¿Ejecutarías una cena.exe conmigo?</p>
     <button onclick="aceptar()">Sí, inicializa</button>
     <button onclick="rechazar()">No, abortar misión</button>
   </div>
@@ -102,8 +86,8 @@
   <div class="message-box hidden" id="respuesta"></div>
   <div id="easterEgg" class="egg"></div>
 
-  <audio id="sonidoAceptar" src="https://cdn.pixabay.com/audio/2023/03/22/audio_2d095e760b.mp3"></audio>
-  <audio id="sonidoRechazo" src="https://cdn.pixabay.com/audio/2022/03/26/audio_1ef21a3a42.mp3"></audio>
+  <audio id="sonidoAceptar" src="sonido-aceptar.mp3"></audio>
+  <audio id="sonidoRechazo" src="sonido-rechazo.mp3"></audio>
 
   <script>
     const step1 = document.getElementById("step1");
@@ -125,13 +109,15 @@
     }
 
     function seleccionarFecha(fecha) {
-      document.getElementById("respuestaSeleccion").value = "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
-      respuestaDiv.innerHTML = "Nos vemos el " + fecha + ". Gracias por tu tiempo y curiosidad 🍃";
+      document.getElementById("respuestaSeleccion").value =
+        "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
+      respuestaDiv.innerHTML =
+        "Nos vemos el " + fecha + ". Gracias por tu tiempo y curiosidad 🍃";
       respuestaDiv.classList.remove("hidden");
     }
 
-    document.addEventListener('keydown', function(e) {
-      if (e.key.toLowerCase() === 'a') {
+    document.addEventListener("keydown", function (e) {
+      if (e.key.toLowerCase() === "a") {
         egg.innerHTML = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
         egg.style.display = "block";
       }
@@ -139,12 +125,12 @@
   </script>
 
   <!--
-  Gracias por mirar el código. 
+  Gracias por mirar el código.
   Así como tú, todo lo bueno está detrás de lo obvio.
   -->
 
   <!--
-  Si estás leyendo esto... entonces te importó mirar más allá.  
+  Si estás leyendo esto... entonces te importó mirar más allá.
   Como en la vida, lo esencial a veces no está visible a simple vista.
   Nos vemos el día que elijas.
   -->
