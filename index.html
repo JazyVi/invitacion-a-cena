@@ -91,10 +91,10 @@
   <div class="step2 hidden" id="step2">
     <p id="eggMensajeCuriosidad">Me encanta tu curiosidad, siempre me cautivó desde esa mirada misteriosa.</p>
     <p id="mensaje-fecha">Elige la fecha en que quieras ejecutar la función:</p>
-    <form name="invitacion" method="POST" data-netlify="true" onsubmit="return enviarFormulario(event)">
+    <form name="invitacion">
       <input type="hidden" name="respuesta" id="respuestaSeleccion" />
-      <button type="submit" onclick="seleccionarFecha('12/06')">12/06 - 18:00 a 20:00 hrs</button>
-      <button type="submit" onclick="seleccionarFecha('13/06')">13/06 - 18:00 a 20:00 hrs</button>
+      <button type="button" onclick="seleccionarFecha('12/06 - 18:00 a 20:00 hrs')">12/06 - 18:00 a 20:00 hrs</button>
+      <button type="button" onclick="seleccionarFecha('13/06 - 18:00 a 20:00 hrs')">13/06 - 18:00 a 20:00 hrs</button>
     </form>
   </div>
 
@@ -132,25 +132,6 @@
       document.getElementById("respuesta").innerHTML =
         "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
       document.getElementById("respuesta").classList.remove("hidden");
-    }
-
-    function enviarFormulario(event) {
-      event.preventDefault();
-      const form = event.target;
-      const data = new FormData(form);
-      fetch("/", {
-        method: "POST",
-        body: data
-      }).then(() => {
-        form.classList.add("hidden");
-        document.getElementById("mensaje-fecha").style.display = "none";
-        document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
-        document.getElementById("respuesta").classList.remove("hidden");
-      }).catch(() => {
-        document.getElementById("respuesta").innerHTML = "Ocurrió un error al enviar la respuesta.";
-        document.getElementById("respuesta").classList.remove("hidden");
-      });
-      return false;
     }
 
     document.addEventListener("keydown", function (e) {
