@@ -113,8 +113,25 @@
     }
 
     function seleccionarFecha(fecha) {
-      document.getElementById("respuestaSeleccion").value =
-        "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
+      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSczqX_bUqM_STLouAXq4P6PIjAmAiMR_FLlgZrzuP7Wslf8_A/formResponse";
+      const fieldName = "entry.159409339";
+
+      // Enviar en segundo plano
+      const data = new FormData();
+      data.append(fieldName, fecha);
+
+      fetch(formURL, {
+        method: "POST",
+        mode: "no-cors",
+        body: data
+      });
+
+      // Mostrar mensaje final
+      document.querySelector("form").classList.add("hidden");
+      document.getElementById("mensaje-fecha").style.display = "none";
+      document.getElementById("respuesta").innerHTML =
+        "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+      document.getElementById("respuesta").classList.remove("hidden");
     }
 
     function enviarFormulario(event) {
