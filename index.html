@@ -1,2 +1,205 @@
-<!-- HTML final con chihuahua real, huevo de pascua y animaciones -->
-<!-- (Contenido insertado previamente en la conversación) -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una invitación silenciosa</title>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    video#fondo-video {
+      position: fixed;
+      top: 0; left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.6) blur(1px);
+    }
+    .container, .step2, .message-box, .curiosidad-box, .chihuahua-secret {
+      background: rgba(34, 40, 49, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin-top: 1rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 1rem; color: #fff; }
+    p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.6; }
+    button {
+      background-color: #e89bae;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      margin: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    button:hover { background-color: #ce6a85; }
+    .hidden { display: none; }
+    #easterEgg {
+      position: absolute;
+      bottom: 1.5rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: #fff;
+      text-shadow: 1px 1px 2px black;
+      display: none;
+      animation: fadeIn 2s ease-in-out;
+    }
+    #curiosidadPrompt {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+    #chihuahua-btn {
+      width: 50px;
+      height: 50px;
+      background: url('chihuahua-kawaii.png') center/cover no-repeat;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+    #chihuahua-btn:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+    .chihuahua-secret pre {
+      text-align: left;
+      white-space: pre-wrap;
+      background: #1e1e1e;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: #00ff90;
+      font-family: monospace;
+      animation: scaleIn 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop id="fondo-video">
+    <source src="fondo-luna.mp4" type="video/mp4" />
+  </video>
+
+  <div class="container" id="step1">
+    <h1>Hola Alain.</h1>
+    <p>
+      A veces el código se corrompe con emociones.<br/>
+      Esta vez, solo quiero invitarte a una cena hecha con calma y gratitud.<br/>
+      Sin palabras, sin presiones.<br/>
+      Solo tú, yo, y unos platos bien pensados.
+    </p>
+    <p>¿Ejecutarías una cena.exe conmigo?</p>
+    <button onclick="aceptar()">Sí, inicializa</button>
+    <button onclick="rechazar()">No, abortar misión</button>
+  </div>
+
+  <div class="step2 hidden" id="step2">
+    <p id="mensaje-fecha">Elige la fecha en que quieras ejecutar la función:</p>
+    <form name="invitacion" method="POST" data-netlify="true" onsubmit="return enviarFormulario(event)">
+      <input type="hidden" name="respuesta" id="respuestaSeleccion" />
+      <button type="submit" onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
+      <button type="submit" onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
+    </form>
+  </div>
+
+  <div class="message-box hidden" id="respuesta"></div>
+
+  <div id="curiosidadPrompt" class="curiosidad-box">
+    <p>¿Tienes más curiosidad...? </p>
+    <button id="chihuahua-btn" onclick="mostrarReglas()"></button>
+  </div>
+
+  <div class="chihuahua-secret hidden" id="chihuahuaBox">
+    <p>// Reglas para ejecutar cena.exe</p>
+    <pre>
+try {
+  if (hablas || escribes || hacesMímica) throw "Acceso denegado";
+  conectar({ protocolo: "intuición" });
+} catch(e) {
+  reiniciaCorazón();
+}
+
+// NO_LOG: Porque los verdaderos sentimientos no se loguean
+// Hint: Usa tu buffer emocional para transmitir paquetes no verbales
+    </pre>
+  </div>
+
+  <div id="easterEgg"></div>
+
+  <script>
+    function aceptar() {
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    }
+
+    function rechazar() {
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
+      document.getElementById("respuesta").classList.remove("hidden");
+    }
+
+    function seleccionarFecha(fecha) {
+      document.getElementById("respuestaSeleccion").value =
+        "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
+    }
+
+    function enviarFormulario(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
+      fetch("/", {
+        method: "POST",
+        body: data
+      }).then(() => {
+        form.classList.add("hidden");
+        document.getElementById("mensaje-fecha").style.display = "none";
+        document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+        document.getElementById("respuesta").classList.remove("hidden");
+        document.getElementById("curiosidadPrompt").style.display = "flex";
+      }).catch(() => {
+        document.getElementById("respuesta").innerHTML = "Ocurrió un error al enviar la respuesta.";
+        document.getElementById("respuesta").classList.remove("hidden");
+      });
+      return false;
+    }
+
+    function mostrarReglas() {
+      document.getElementById("chihuahuaBox").classList.remove("hidden");
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key.toLowerCase() === 'a') {
+        const egg = document.getElementById("easterEgg");
+        egg.innerText = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
+        egg.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
