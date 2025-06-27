@@ -113,25 +113,41 @@
     }
 
     function seleccionarFecha(fecha) {
-      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeFZt17Rh7Us1Tx54IY7OYDJER-XWpAxA7RGQnRe7pAhECZLg/formResponse";
-      const fieldName = "entry.388150845";
+      const formURL = "https://formspree.io/f/xjkrjowd";
      
       const data = new FormData();
-      data.append(fieldName, fecha);
+      data.append("acepta", "Sí");
+      data.append("fecha", fecha);
 
-      fetch(formURL, {
-        method: "POST",
-        mode: "no-cors",
-        body: data
-      });
+  fetch(formURL, {
+    method: "POST",
+    mode: "no-cors",
+    body: data
+  });
 
-      // Mostrar mensaje final
-      document.querySelector("form").classList.add("hidden");
-      document.getElementById("mensaje-fecha").style.display = "none";
-      document.getElementById("respuesta").innerHTML =
-        "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
-      document.getElementById("respuesta").classList.remove("hidden");
-    }
+  document.querySelector("form").classList.add("hidden");
+  document.getElementById("mensaje-fecha").style.display = "none";
+  document.getElementById("respuesta").innerHTML =
+    "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+  document.getElementById("respuesta").classList.remove("hidden");
+}
+
+function rechazar() {
+  const formURL = "https://formspree.io/f/xjkrjowd";
+
+  const data = new FormData();
+  data.append("acepta", "No");
+
+  fetch(formURL, {
+    method: "POST",
+    mode: "no-cors",
+    body: data
+  });
+
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
+  document.getElementById("respuesta").classList.remove("hidden");
+}
 
     document.addEventListener("keydown", function (e) {
       if (e.key.toLowerCase() === 'a') {
