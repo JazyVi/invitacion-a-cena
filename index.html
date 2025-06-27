@@ -12,7 +12,7 @@
     body {
       margin: 0;
       font-family: 'Georgia', serif;
-      color: #5e0e1b;
+      color: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -33,26 +33,37 @@
       filter: brightness(0.6) blur(1px);
     }
     .container, .step2, .message-box {
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(34, 40, 49, 0.6);
       padding: 2rem;
       border-radius: 1rem;
       max-width: 500px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       animation: fadeIn 2s ease-in-out;
     }
-    h1 { font-size: 1.6rem; margin-bottom: 1rem; }
+    h1 { font-size: 1.6rem; margin-bottom: 1rem; color: #fff; }
     p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.6; }
     button {
-      background-color: #8b1e3f; color: white; border: none;
-      padding: 0.8rem 1.2rem; margin: 0.5rem;
-      border-radius: 0.5rem; cursor: pointer; font-size: 1rem;
+      background-color: #e89bae;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      margin: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
       transition: background 0.3s ease;
     }
-    button:hover { background-color: #6e152f; }
+    button:hover { background-color: #ce6a85; }
     .hidden { display: none; }
     .egg {
-      margin-top: 1rem; font-style: italic;
-      display: none; animation: fadeIn 2s ease-in-out;
+      position: absolute;
+      bottom: 2rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      display: none;
+      animation: fadeIn 2s ease-in-out;
     }
   </style>
 </head>
@@ -75,11 +86,11 @@
   </div>
 
   <div class="step2 hidden" id="step2">
-    <p>Elige la fecha en que quieras ejecutar la función:</p>
+    <p id="mensaje-fecha">Elige la fecha en que quieras ejecutar la función:</p>
     <form name="invitacion" method="POST" data-netlify="true" onsubmit="return enviarFormulario(event)">
       <input type="hidden" name="respuesta" id="respuestaSeleccion" />
-      <button onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
-      <button onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
+      <button type="submit" onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
+      <button type="submit" onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
     </form>
   </div>
 
@@ -94,6 +105,7 @@
     const step2 = document.getElementById("step2");
     const respuestaDiv = document.getElementById("respuesta");
     const egg = document.getElementById("easterEgg");
+    const mensajeFecha = document.getElementById("mensaje-fecha");
 
     function aceptar() {
       document.getElementById("sonidoAceptar").play();
@@ -122,6 +134,7 @@
         body: data
       }).then(() => {
         form.classList.add("hidden");
+        mensajeFecha.style.display = "none";
         respuestaDiv.innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
         respuestaDiv.classList.remove("hidden");
       }).catch(() => {
@@ -138,5 +151,15 @@
       }
     });
   </script>
+
+  <!--
+  Gracias por mirar el código.
+  Así como tú, todo lo bueno está detrás de lo obvio.
+  -->
+  <!--
+  Si estás leyendo esto... entonces te importó mirar más allá.
+  Como en la vida, lo esencial a veces no está visible a simple vista.
+  Nos vemos el día que elijas.
+  -->
 </body>
 </html>
