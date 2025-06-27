@@ -32,13 +32,14 @@
       z-index: -1;
       filter: brightness(0.6) blur(1px);
     }
-    .container, .step2, .message-box {
+    .container, .step2, .message-box, .curiosidad-box {
       background: rgba(34, 40, 49, 0.6);
       padding: 2rem;
       border-radius: 1rem;
       max-width: 500px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       animation: fadeIn 2s ease-in-out;
+      margin-top: 1rem;
     }
     h1 { font-size: 1.6rem; margin-bottom: 1rem; color: #fff; }
     p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.6; }
@@ -55,15 +56,25 @@
     }
     button:hover { background-color: #ce6a85; }
     .hidden { display: none; }
-    .egg {
-      position: absolute;
-      bottom: 2rem;
-      font-size: 1rem;
+    .egg, .chihuahua-secret {
+      margin-top: 2rem;
       font-style: italic;
+      font-size: 1rem;
       color: white;
       text-shadow: 1px 1px 2px black;
       display: none;
       animation: fadeIn 2s ease-in-out;
+    }
+    #chihuahua-img {
+      width: 120px;
+      margin: 1rem auto;
+    }
+    input[type="text"] {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      margin-top: 1rem;
+      width: 100%;
     }
   </style>
 </head>
@@ -95,29 +106,38 @@
   </div>
 
   <div class="message-box hidden" id="respuesta"></div>
-  <div id="easterEgg" class="egg"></div>
+
+  <div class="curiosidad-box">
+    <p>¿Tienes más curiosidad? Escribe algo...</p>
+    <input type="text" id="curiosidad" placeholder="¿quiero saber más?" oninput="verificarClave()" />
+  </div>
+
+  <div class="chihuahua-secret hidden" id="chihuahuaBox">
+    <img src="chihuahua-kawaii.png" alt="chihuahua kawaii" id="chihuahua-img" />
+    <p>// Reglas de ejecución de la cena.exe</p>
+    <pre>
+if (hablas || escribes) {
+  accesoDenegado();
+} else {
+  conectaConTuIntuicion();
+}</pre>
+  </div>
 
   <audio id="sonidoAceptar" src="sonido-aceptar.mp3"></audio>
   <audio id="sonidoRechazo" src="sonido-rechazo.mp3"></audio>
 
   <script>
-    const step1 = document.getElementById("step1");
-    const step2 = document.getElementById("step2");
-    const respuestaDiv = document.getElementById("respuesta");
-    const egg = document.getElementById("easterEgg");
-    const mensajeFecha = document.getElementById("mensaje-fecha");
-
     function aceptar() {
       document.getElementById("sonidoAceptar").play();
-      step1.classList.add("hidden");
-      step2.classList.remove("hidden");
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
     }
 
     function rechazar() {
       document.getElementById("sonidoRechazo").play();
-      step1.classList.add("hidden");
-      respuestaDiv.innerHTML = "De lo que te pierdes 💔";
-      respuestaDiv.classList.remove("hidden");
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
+      document.getElementById("respuesta").classList.remove("hidden");
     }
 
     function seleccionarFecha(fecha) {
@@ -134,22 +154,22 @@
         body: data
       }).then(() => {
         form.classList.add("hidden");
-        mensajeFecha.style.display = "none";
-        respuestaDiv.innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
-        respuestaDiv.classList.remove("hidden");
+        document.getElementById("mensaje-fecha").style.display = "none";
+        document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+        document.getElementById("respuesta").classList.remove("hidden");
       }).catch(() => {
-        respuestaDiv.innerHTML = "Ocurrió un error al enviar la respuesta.";
-        respuestaDiv.classList.remove("hidden");
+        document.getElementById("respuesta").innerHTML = "Ocurrió un error al enviar la respuesta.";
+        document.getElementById("respuesta").classList.remove("hidden");
       });
       return false;
     }
 
-    document.addEventListener("keydown", function (e) {
-      if (e.key.toLowerCase() === "a") {
-        egg.innerHTML = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
-        egg.style.display = "block";
+    function verificarClave() {
+      const input = document.getElementById("curiosidad").value.toLowerCase();
+      if (input.includes("quiero saber") || input.includes("curiosidad")) {
+        document.getElementById("chihuahuaBox").classList.remove("hidden");
       }
-    });
+    }
   </script>
 
   <!--
