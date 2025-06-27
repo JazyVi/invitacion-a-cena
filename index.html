@@ -4,18 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Una invitación silenciosa</title>
-
-  <!-- Fuente Nunito -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
- 
+
   <style>
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
-    }
-    @keyframes scaleIn {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
     }
     body {
       margin: 0;
@@ -40,7 +34,7 @@
       z-index: -1;
       filter: brightness(0.6) blur(1px);
     }
-    .container, .step2, .message-box, .curiosidad-box, .chihuahua-secret {
+    .container, .step2, .message-box {
       background: rgba(34, 40, 49, 0.6);
       padding: 2rem;
       border-radius: 1rem;
@@ -62,48 +56,16 @@
       font-size: 1rem;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-    button:hover { 
+    button:hover {
       background-color: #d67c9d;
-      transform: scale(1.05);}
+      transform: scale(1.05);
+    }
     .hidden { display: none; }
-    #easterEgg {
-      position: absolute;
-      bottom: 1.5rem;
-      font-size: 1rem;
+    #eggMensajeCuriosidad {
+      display: none;
       font-style: italic;
-      color: #fff;
-      text-shadow: 1px 1px 2px black;
-      display: none;
-      animation: fadeIn 2s ease-in-out;
-    }
-    #curiosidadPrompt {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      animation: fadeIn 2s ease-in-out;
-    }
-    #chihuahua-btn {
-      width: 50px;
-      height: 50px;
-      background: url('chihuahua-kawaii.png') center/cover no-repeat;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.4s ease;
-    }
-    #chihuahua-btn:hover {
-      transform: rotate(10deg) scale(1.1);
-    }
-    .chihuahua-secret pre {
-      text-align: left;
-      white-space: pre-wrap;
-      background: #1e1e1e;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      color: #00ff90;
-      font-family: monospace;
-      animation: scaleIn 1s ease-in-out;
+      color: #fffbe0;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
@@ -112,30 +74,22 @@
     <source src="fondo-luna.mp4" type="video/mp4" />
   </video>
 
-<div class="container" id="step1" style="text-align: left;">
-  <h1 style="text-align: center;">Hola Alain 🤗</h1>
-
-  <p style="font-style: italic; font-size: 1.05rem; color: #eee; text-align: left;">
-    A veces el código se corrompe con emociones ...
-  </p>
-
-  <p style="height: 1rem;"></p> <!-- espacio en blanco -->
-
-  <p style="margin-top: 1rem;">
+  <div class="container" id="step1" style="text-align: left;">
+    <h1 style="text-align: center;">Hola Alain 🤗</h1>
+    <p style="font-style: italic; font-size: 1.05rem; color: #eee;">A veces el código se corrompe con emociones ...</p>
+    <p style="height: 1rem;"></p>
     <p>🍽️ Esta vez, solo quiero invitarte a una cena hecha con calma y gratitud.<br/>
-    Sin palabras, sin presiones. 🔇 🤫 <br/>
-    Solo tú, yo, y unos platos bien pensados. 👩‍🍳
-  </p>
-
-  <p style="margin-top: 2rem;">¿Ejecutarías una cena.exe conmigo?</p>
-
-  <div style="text-align: center;">
-    <button onclick="aceptar()">▶ Ejecutar protocolo.cena()</button>
-    <button onclick="rechazar()">❌ Terminar proceso</button>
+    🔇 🤫 Sin palabras, sin presiones.<br/>
+    👩‍🍳 Solo tú, yo, y unos platos bien pensados.</p>
+    <p style="margin-top: 2rem;">¿Ejecutarías una cena.exe conmigo?</p>
+    <div style="text-align: center;">
+      <button onclick="aceptar()">▶ Ejecutar protocolo.cena()</button>
+      <button onclick="rechazar()">❌ Terminar proceso</button>
+    </div>
   </div>
-</div>
 
   <div class="step2 hidden" id="step2">
+    <p id="eggMensajeCuriosidad">Me encanta tu curiosidad, siempre me cautivó desde esa mirada misteriosa.</p>
     <p id="mensaje-fecha">Elige la fecha en que quieras ejecutar la función:</p>
     <form name="invitacion" method="POST" data-netlify="true" onsubmit="return enviarFormulario(event)">
       <input type="hidden" name="respuesta" id="respuestaSeleccion" />
@@ -145,28 +99,6 @@
   </div>
 
   <div class="message-box hidden" id="respuesta"></div>
-
-  <div id="curiosidadPrompt" class="curiosidad-box" style="display:flex;">
-  <p>¿Tienes más curiosidad...? </p>
-  <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"></button>
-</div>
-
-  <div class="chihuahua-secret hidden" id="chihuahuaBox">
-    <p>// Reglas para ejecutar cena.exe</p>
-    <pre>
-try {
-  if (hablas || escribes || hacesMímica) throw "Acceso denegado";
-  conectar({ protocolo: "intuición" });
-} catch(e) {
-  reiniciaCorazón();
-}
-
-// NO_LOG: Porque los verdaderos sentimientos no se loguean
-// Hint: Usa tu buffer emocional para transmitir paquetes no verbales
-    </pre>
-  </div>
-
-  <div id="easterEgg"></div>
 
   <script>
     function aceptar() {
@@ -197,7 +129,6 @@ try {
         document.getElementById("mensaje-fecha").style.display = "none";
         document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
         document.getElementById("respuesta").classList.remove("hidden");
-        document.getElementById("curiosidadPrompt").style.display = "flex";
       }).catch(() => {
         document.getElementById("respuesta").innerHTML = "Ocurrió un error al enviar la respuesta.";
         document.getElementById("respuesta").classList.remove("hidden");
@@ -205,15 +136,10 @@ try {
       return false;
     }
 
-    function mostrarReglas() {
-      document.getElementById("chihuahuaBox").classList.remove("hidden");
-    }
-
     document.addEventListener("keydown", function (e) {
       if (e.key.toLowerCase() === 'a') {
-        const egg = document.getElementById("easterEgg");
-        egg.innerText = "En tu mirada siempre vi curiosidad, y eso te trajo aquí.";
-        egg.style.display = "block";
+        const egg = document.getElementById("eggMensajeCuriosidad");
+        if (egg) egg.style.display = "block";
       }
     });
   </script>
