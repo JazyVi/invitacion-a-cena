@@ -76,10 +76,10 @@
 
   <div class="step2 hidden" id="step2">
     <p>Elige la fecha en que quieras ejecutar la función:</p>
-    <form name="invitacion" method="POST" data-netlify="true">
+    <form name="invitacion" method="POST" data-netlify="true" onsubmit="return enviarFormulario(event)">
       <input type="hidden" name="respuesta" id="respuestaSeleccion" />
-      <button type="submit" onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
-      <button type="submit" onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
+      <button onclick="seleccionarFecha('05/06')">05/06 - 19:00 a 21:00 hrs</button>
+      <button onclick="seleccionarFecha('12/06')">12/06 - 19:00 a 21:00 hrs</button>
     </form>
   </div>
 
@@ -111,9 +111,24 @@
     function seleccionarFecha(fecha) {
       document.getElementById("respuestaSeleccion").value =
         "✔️ Sí, Alain ha elegido " + fecha + " para cenar contigo.";
-      respuestaDiv.innerHTML =
-        "Nos vemos el " + fecha + ". Gracias por tu tiempo y curiosidad 🍃";
-      respuestaDiv.classList.remove("hidden");
+    }
+
+    function enviarFormulario(event) {
+      event.preventDefault();
+      const form = event.target;
+      const data = new FormData(form);
+      fetch("/", {
+        method: "POST",
+        body: data
+      }).then(() => {
+        form.classList.add("hidden");
+        respuestaDiv.innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+        respuestaDiv.classList.remove("hidden");
+      }).catch(() => {
+        respuestaDiv.innerHTML = "Ocurrió un error al enviar la respuesta.";
+        respuestaDiv.classList.remove("hidden");
+      });
+      return false;
     }
 
     document.addEventListener("keydown", function (e) {
@@ -123,16 +138,5 @@
       }
     });
   </script>
-
-  <!--
-  Gracias por mirar el código.
-  Así como tú, todo lo bueno está detrás de lo obvio.
-  -->
-
-  <!--
-  Si estás leyendo esto... entonces te importó mirar más allá.
-  Como en la vida, lo esencial a veces no está visible a simple vista.
-  Nos vemos el día que elijas.
-  -->
 </body>
 </html>
