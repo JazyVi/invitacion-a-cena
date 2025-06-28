@@ -103,6 +103,15 @@
   </div>
 
   <div class="message-box hidden" id="respuesta"></div>
+  <div id="vistaChihuahua2" class="hidden" style="margin-top: 2rem; background: rgba(34,40,49,0.6); padding: 2rem; border-radius: 1rem; max-width: 500px; animation: fadeIn 2s ease-in-out;">
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <p><strong>¿Tienes más curiosidad...?</strong></p>
+    <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
+      style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
+      border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
+    </button>
+  </div>
+</div>
 
   <!-- Vista Chihuahua -->
   <div id="vistaChihuahua" class="chihuahua-secret hidden" style="margin-top: 2rem; text-align: left;">
@@ -133,8 +142,15 @@ try {
     function aceptar() {
       document.getElementById("step1").classList.add("hidden");
       document.getElementById("step2").classList.remove("hidden");
+   document.addEventListener("keydown", function (e) {
+  if (e.key.toLowerCase() === 'j') {
+    const chihuahua2 = document.getElementById("vistaChihuahua2");
+    if (chihuahua2) {
+      chihuahua2.classList.remove("hidden");
+      chihuahua2.style.animation = "fadeIn 2s ease-in-out";
     }
-
+  }
+});
     function rechazar() {
       const formURL = "https://formspree.io/f/xjkrjowd";
       const data = new FormData();
