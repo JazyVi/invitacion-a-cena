@@ -2,13 +2,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- 🥚 Gracias por mirar el código. Así como tú, todo lo bueno está detrás de lo obvio. -->
+  <!--
+  🥚 Gracias por mirar el código.
+  Así como tú, todo lo bueno está detrás de lo obvio.
+  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Una invitación silenciosa</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
     body {
       margin: 0;
       font-family: 'Nunito', sans-serif;
@@ -32,7 +38,7 @@
       z-index: -1;
       filter: brightness(0.6) blur(1px);
     }
-    .container, .step2, .message-box, .vista-chihuahua-1, .vista-chihuahua-2 {
+    .container, .step2, .message-box {
       background: rgba(34, 40, 49, 0.6);
       padding: 2rem;
       border-radius: 1rem;
@@ -59,23 +65,11 @@
       transform: scale(1.05);
     }
     .hidden { display: none; }
-    .curiosidad-flex {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-    }
-    #chihuahua-btn {
-      width: 50px;
-      height: 50px;
-      background: url('chihuahua-kawaii.png') center/cover no-repeat;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.4s ease;
-    }
-    #chihuahua-btn:hover {
-      transform: rotate(10deg) scale(1.1);
+    #eggMensajeCuriosidad {
+      display: none;
+      font-style: italic;
+      color: #fffbe0;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
@@ -110,14 +104,16 @@
 
   <div class="message-box hidden" id="respuesta"></div>
 
-  <div class="vista-chihuahua-1 hidden" id="vistaChihuahua">
-    <div class="curiosidad-flex">
-      <p><strong>¿Tienes más curiosidad...?</strong></p>
-      <button id="chihuahua-btn" onclick="mostrarVistaChihuahua2()" title="Haz clic si te atreves 🐶"></button>
-    </div>
+  <!-- Vista Chihuahua -->
+  <div id="vistaChihuahua" class="chihuahua-secret hidden" style="margin-top: 2rem; text-align: left;">
+    <p><strong>¿Tienes más curiosidad...?</strong></p>
+    <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
+      style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
+      border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
+    </button>
   </div>
 
-  <div class="vista-chihuahua-2 hidden" id="chihuahuaBox">
+  <div class="chihuahua-secret hidden" id="chihuahuaBox" style="text-align: left;">
     <p>// Reglas para ejecutar cena.exe</p>
     <pre style="background:#1e1e1e; color:#00ff90; padding:1rem; border-radius:0.5rem; font-family:monospace;">
 try {
@@ -159,11 +155,9 @@ try {
       document.getElementById("mensaje-fecha").style.display = "none";
       document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
       document.getElementById("respuesta").classList.remove("hidden");
-      document.getElementById("vistaChihuahua").classList.remove("hidden");
     }
 
-    function mostrarVistaChihuahua2() {
-      document.getElementById("vistaChihuahua").classList.add("hidden");
+    function mostrarReglas() {
       document.getElementById("chihuahuaBox").classList.remove("hidden");
     }
 
