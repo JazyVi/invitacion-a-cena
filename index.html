@@ -1,20 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!--
-  🥚 Gracias por mirar el código.
-  Así como tú, todo lo bueno está detrás de lo obvio.
-  -->
+  <!-- 🥚 Gracias por mirar el código. Así como tú, todo lo bueno está detrás de lo obvio. -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Una invitación silenciosa</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     body {
       margin: 0;
       font-family: 'Nunito', sans-serif;
@@ -103,25 +96,19 @@
   </div>
 
   <div class="message-box hidden" id="respuesta"></div>
+
+  <!-- Vista Chihuahua 2.0 (activa con la tecla J) -->
   <div id="vistaChihuahua2" class="hidden" style="margin-top: 2rem; background: rgba(34,40,49,0.6); padding: 2rem; border-radius: 1rem; max-width: 500px; animation: fadeIn 2s ease-in-out;">
-  <div style="display: flex; align-items: center; gap: 1rem;">
-    <p><strong>¿Tienes más curiosidad...?</strong></p>
-    <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
-      style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
-      border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
-    </button>
-  </div>
-</div>
-
-  <!-- Vista Chihuahua -->
-  <div id="vistaChihuahua" class="chihuahua-secret hidden" style="margin-top: 2rem; text-align: left;">
-    <p><strong>¿Tienes más curiosidad...?</strong></p>
-    <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
-      style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
-      border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
-    </button>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <p><strong>¿Tienes más curiosidad...?</strong></p>
+      <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
+        style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
+        border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
+      </button>
+    </div>
   </div>
 
+  <!-- Reglas ocultas -->
   <div class="chihuahua-secret hidden" id="chihuahuaBox" style="text-align: left;">
     <p>// Reglas para ejecutar cena.exe</p>
     <pre style="background:#1e1e1e; color:#00ff90; padding:1rem; border-radius:0.5rem; font-family:monospace;">
@@ -132,7 +119,6 @@ try {
   activarMisterio();
   reiniciarLenguajeNoVerbal();
 }
-
 // NOTA: Este canal solo acepta señales cerebrales compatibles con JazmínOS
 // ⚠️ No usar WhatsApp. No usar papel. No usar voz. Solo usar intuición.
     </pre>
@@ -142,15 +128,8 @@ try {
     function aceptar() {
       document.getElementById("step1").classList.add("hidden");
       document.getElementById("step2").classList.remove("hidden");
-   document.addEventListener("keydown", function (e) {
-  if (e.key.toLowerCase() === 'j') {
-    const chihuahua2 = document.getElementById("vistaChihuahua2");
-    if (chihuahua2) {
-      chihuahua2.classList.remove("hidden");
-      chihuahua2.style.animation = "fadeIn 2s ease-in-out";
     }
-  }
-});
+
     function rechazar() {
       const formURL = "https://formspree.io/f/xjkrjowd";
       const data = new FormData();
@@ -174,6 +153,7 @@ try {
     }
 
     function mostrarReglas() {
+      document.getElementById("vistaChihuahua2").classList.add("hidden");
       document.getElementById("chihuahuaBox").classList.remove("hidden");
     }
 
@@ -183,10 +163,10 @@ try {
         if (egg) egg.style.display = "block";
       }
       if (e.key.toLowerCase() === 'j') {
-        const chihuahuaView = document.getElementById("vistaChihuahua");
-        if (chihuahuaView) {
-          chihuahuaView.classList.remove("hidden");
-          chihuahuaView.style.animation = "fadeIn 2s ease-in-out";
+        const chihuahua2 = document.getElementById("vistaChihuahua2");
+        if (chihuahua2) {
+          chihuahua2.classList.remove("hidden");
+          chihuahua2.style.animation = "fadeIn 2s ease-in-out";
         }
       }
     });
