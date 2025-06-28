@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!--
+  <!--
   🥚 Gracias por mirar el código.
   Así como tú, todo lo bueno está detrás de lo obvio.
   -->
@@ -9,7 +10,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Una invitación silenciosa</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -104,6 +104,31 @@
 
   <div class="message-box hidden" id="respuesta"></div>
 
+  <!-- Vista Chihuahua -->
+  <div id="vistaChihuahua" class="chihuahua-secret hidden" style="margin-top: 2rem; text-align: left;">
+    <p><strong>¿Tienes más curiosidad...?</strong></p>
+    <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
+      style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
+      border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
+    </button>
+  </div>
+
+  <div class="chihuahua-secret hidden" id="chihuahuaBox" style="text-align: left;">
+    <p>// Reglas para ejecutar cena.exe</p>
+    <pre style="background:#1e1e1e; color:#00ff90; padding:1rem; border-radius:0.5rem; font-family:monospace;">
+try {
+  if (hablas || escribes || hacesMímica) throw "Protocolo roto";
+  iniciarConexión({ canal: "mirada.bin" });
+} catch(e) {
+  activarMisterio();
+  reiniciarLenguajeNoVerbal();
+}
+
+// NOTA: Este canal solo acepta señales cerebrales compatibles con JazmínOS
+// ⚠️ No usar WhatsApp. No usar papel. No usar voz. Solo usar intuición.
+    </pre>
+  </div>
+
   <script>
     function aceptar() {
       document.getElementById("step1").classList.add("hidden");
@@ -111,6 +136,10 @@
     }
 
     function rechazar() {
+      const formURL = "https://formspree.io/f/xjkrjowd";
+      const data = new FormData();
+      data.append("acepta", "No");
+      fetch(formURL, { method: "POST", mode: "no-cors", body: data });
       document.getElementById("step1").classList.add("hidden");
       document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
       document.getElementById("respuesta").classList.remove("hidden");
@@ -118,45 +147,31 @@
 
     function seleccionarFecha(fecha) {
       const formURL = "https://formspree.io/f/xjkrjowd";
-     
       const data = new FormData();
       data.append("acepta", "Sí");
       data.append("fecha", fecha);
+      fetch(formURL, { method: "POST", mode: "no-cors", body: data });
+      document.querySelector("form").classList.add("hidden");
+      document.getElementById("mensaje-fecha").style.display = "none";
+      document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
+      document.getElementById("respuesta").classList.remove("hidden");
+    }
 
-  fetch(formURL, {
-    method: "POST",
-    mode: "no-cors",
-    body: data
-  });
-
-  document.querySelector("form").classList.add("hidden");
-  document.getElementById("mensaje-fecha").style.display = "none";
-  document.getElementById("respuesta").innerHTML =
-    "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
-  document.getElementById("respuesta").classList.remove("hidden");
-}
-
-function rechazar() {
-  const formURL = "https://formspree.io/f/xjkrjowd";
-
-  const data = new FormData();
-  data.append("acepta", "No");
-
-  fetch(formURL, {
-    method: "POST",
-    mode: "no-cors",
-    body: data
-  });
-
-  document.getElementById("step1").classList.add("hidden");
-  document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
-  document.getElementById("respuesta").classList.remove("hidden");
-}
+    function mostrarReglas() {
+      document.getElementById("chihuahuaBox").classList.remove("hidden");
+    }
 
     document.addEventListener("keydown", function (e) {
       if (e.key.toLowerCase() === 'a') {
         const egg = document.getElementById("eggMensajeCuriosidad");
         if (egg) egg.style.display = "block";
+      }
+      if (e.key.toLowerCase() === 'j') {
+        const chihuahuaView = document.getElementById("vistaChihuahua");
+        if (chihuahuaView) {
+          chihuahuaView.classList.remove("hidden");
+          chihuahuaView.style.animation = "fadeIn 2s ease-in-out";
+        }
       }
     });
   </script>
