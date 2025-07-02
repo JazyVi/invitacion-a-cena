@@ -8,6 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
     body {
       margin: 0;
       font-family: 'Nunito', sans-serif;
@@ -22,6 +24,7 @@
       position: relative;
       overflow: hidden;
     }
+
     video#fondo-video {
       position: fixed;
       top: 0; left: 0;
@@ -31,7 +34,8 @@
       z-index: -1;
       filter: brightness(0.6) blur(1px);
     }
-    .container, .step2, .message-box {
+
+    .container, .step2, .message-box, #introJuegoChihuahua {
       background: rgba(34, 40, 49, 0.6);
       padding: 2rem;
       border-radius: 1rem;
@@ -40,6 +44,7 @@
       margin-top: 1rem;
       animation: fadeIn 2s ease-in-out;
     }
+
     h1 { font-size: 1.6rem; margin-bottom: 1rem; color: #fff; }
     p { margin-bottom: 1rem; font-size: 1rem; line-height: 1.6; }
     button {
@@ -57,12 +62,24 @@
       background-color: #d67c9d;
       transform: scale(1.05);
     }
+
     .hidden { display: none; }
     #eggMensajeCuriosidad {
       display: none;
       font-style: italic;
       color: #fffbe0;
       margin-bottom: 1rem;
+    }
+
+    canvas#gameCanvas {
+      margin-top: 2rem;
+      border-radius: 1rem;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    #introJuegoChihuahua img {
+      width: 80px;
+      height: auto;
     }
   </style>
 </head>
@@ -71,6 +88,7 @@
     <source src="fondo-luna.mp4" type="video/mp4" />
   </video>
 
+  <!-- Vista 1 -->
   <div class="container" id="step1" style="text-align: left;">
     <h1 style="text-align: center;">Hola Alain 🤗</h1>
     <p style="font-style: italic; font-size: 1.05rem; color: #eee;">A veces el código se corrompe con emociones ...</p>
@@ -85,6 +103,7 @@
     </div>
   </div>
 
+  <!-- Vista 2 -->
   <div class="step2 hidden" id="step2">
     <p id="eggMensajeCuriosidad">Me encanta tu curiosidad, siempre me cautivó desde esa mirada misteriosa tan tuya.</p>
     <p id="mensaje-fecha">Elige la fecha en que quieras ejecutar la función:</p>
@@ -95,36 +114,17 @@
     </form>
   </div>
 
+  <!-- Vista de rechazo -->
   <div class="message-box hidden" id="respuesta"></div>
-  
-  <!-- Juego del Chihuahua Runner (aparece tras rechazar) -->
-  <canvas id="gameCanvas" width="800" height="200" class="hidden" style="margin-top: 2rem; border-radius: 1rem;"></canvas>
 
-
-  <!-- Vista Chihuahua 2.0 (activa con la tecla J) -->
-  <div id="vistaChihuahua2" class="hidden" style="margin-top: 2rem; background: rgba(34,40,49,0.6); padding: 2rem; border-radius: 1rem; max-width: 500px; animation: fadeIn 2s ease-in-out;">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <p><strong>¿Tienes más curiosidad...?</strong></p>
-      <button id="chihuahua-btn" onclick="mostrarReglas()" title="Haz clic si te atreves 🐶"
-        style="width: 50px; height: 50px; background: url('chihuahua-kawaii.png') center/cover no-repeat;
-        border: none; border-radius: 50%; cursor: pointer; transition: transform 0.4s ease;">
-      </button>
-    </div>
+  <!-- Intro del juego -->
+  <div id="introJuegoChihuahua" class="hidden">
+    <img src="chihuahua-kawaii.png" alt="Chihuahua" />
+    <p style="margin-top: 1rem;">Encuentra la letra secreta...</p>
   </div>
 
-  <!-- Reglas ocultas -->
-  <div class="chihuahua-secret hidden" id="chihuahuaBox" style="text-align: left; background: rgba(255, 255, 255, 0.07); padding: 1.5rem; border-radius: 1rem; color: #ffe7f1;">
-  <p style="font-size: 1.1rem;"><strong>🌸 Condiciones para ejecutar la cena.exe</strong></p>
-  <ul style="text-align: left; line-height: 1.7;">
-    <li>🔇 No se permite hablar (puedes usar sonidos misteriosos opcionales 🤫)</li>
-    <li>📵 Nada de escribir, ni papelitos ni WhatsApp. Tu cerebro será tu único mensajero 🧠</li>
-    <li>👀 Comunicación permitida: miradas largas, silencios compartidos y sonrisas tontas</li>
-    <li>🕊️ Reglas creadas en lenguaje no verbal compilado por JazmínOS v2.0</li>
-  </ul>
-  <p style="font-style: italic; margin-top: 1rem; font-size: 0.95rem;">
-    Porque a veces, lo más bonito no necesita palabras 💌
-  </p>
-</div>
+  <!-- Canvas del juego -->
+  <canvas id="gameCanvas" width="800" height="200" class="hidden"></canvas>
 
   <script>
     function aceptar() {
@@ -137,105 +137,20 @@
       const data = new FormData();
       data.append("acepta", "No");
       fetch(formURL, { method: "POST", mode: "no-cors", body: data });
+
       document.getElementById("step1").classList.add("hidden");
-      document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
-      document.getElementById("respuesta").classList.remove("hidden");
+      const respuesta = document.getElementById("respuesta");
+      respuesta.innerHTML = "De lo que te pierdes 💔";
+      respuesta.classList.remove("hidden");
 
-      iniciarJuego(); // <-- activa el juego
-
-      function iniciarJuego() {
-  const canvas = document.getElementById("gameCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.classList.remove("hidden");
-
-  let chihuahua = { x: 50, y: 150, width: 40, height: 40, vy: 0, jumping: false };
-  let gravity = 1.5;
-  let obstacles = [];
-  let score = 0;
-  let gameOver = false;
-
-  function drawChihuahua() {
-    ctx.fillStyle = "#FFD7DC";
-    ctx.fillRect(chihuahua.x, chihuahua.y, chihuahua.width, chihuahua.height);
-  }
-
-  function drawObstacle(ob) {
-    ctx.fillStyle = "#ffaa66";
-    ctx.fillRect(ob.x, ob.y, ob.width, ob.height);
-    ctx.font = "18px Nunito";
-    ctx.fillStyle = "#fff";
-    ctx.fillText("🍄", ob.x + 5, ob.y - 5);
-  }
-
-  function update() {
-    if (gameOver) return;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    chihuahua.vy += gravity;
-    chihuahua.y += chihuahua.vy;
-
-    if (chihuahua.y > 150) {
-      chihuahua.y = 150;
-      chihuahua.vy = 0;
-      chihuahua.jumping = false;
-    }
-
-    drawChihuahua();
-
-    for (let ob of obstacles) {
-      ob.x -= 5;
-      drawObstacle(ob);
-
-      if (
-        chihuahua.x < ob.x + ob.width &&
-        chihuahua.x + chihuahua.width > ob.x &&
-        chihuahua.y < ob.y + ob.height &&
-        chihuahua.y + chihuahua.height > ob.y
-      ) {
-        gameOver = true;
-      }
-    }
-
-    ctx.fillStyle = "#fff";
-    ctx.font = "16px Nunito";
-    ctx.fillText("Puntos: " + score, 10, 20);
-
-    if (Math.random() < 0.02) {
-      obstacles.push({ x: canvas.width, y: 160, width: 30, height: 40 });
-    }
-
-    obstacles = obstacles.filter(ob => ob.x + ob.width > 0);
-    score++;
-
-    if (!gameOver) {
-      requestAnimationFrame(update);
-    } else {
-      ctx.fillStyle = "#ffbdbd";
-      ctx.font = "20px Nunito";
-      ctx.fillText("¡Ups! El chihuahua tropezó con un hongo 🍄", 200, 100);
-      ctx.fillText("Presiona R para reiniciar", 280, 130);
-    }
-  }
-
-  document.addEventListener("keydown", function(e) {
-    if (e.code === "Space" && !chihuahua.jumping) {
-      chihuahua.vy = -20;
-      chihuahua.jumping = true;
-    }
-    if (e.key.toLowerCase() === "r" && gameOver) {
-      chihuahua.y = 150;
-      chihuahua.vy = 0;
-      obstacles = [];
-      score = 0;
-      gameOver = false;
-      update();
-    }
-  });
-
-  update();
-}
-
+      // Desvanecer mensaje y mostrar intro
+      setTimeout(() => {
+        respuesta.style.animation = "fadeOut 2s ease forwards";
+        setTimeout(() => {
+          respuesta.classList.add("hidden");
+          document.getElementById("introJuegoChihuahua").classList.remove("hidden");
+        }, 2000);
+      }, 3000);
     }
 
     function seleccionarFecha(fecha) {
@@ -244,28 +159,116 @@
       data.append("acepta", "Sí");
       data.append("fecha", fecha);
       fetch(formURL, { method: "POST", mode: "no-cors", body: data });
+
       document.querySelector("form").classList.add("hidden");
       document.getElementById("mensaje-fecha").style.display = "none";
       document.getElementById("respuesta").innerHTML = "Nos vemos el día que elegiste. Gracias por tu tiempo y curiosidad 🍃";
       document.getElementById("respuesta").classList.remove("hidden");
     }
 
-    function mostrarReglas() {
-      document.getElementById("vistaChihuahua2").classList.add("hidden");
-      document.getElementById("chihuahuaBox").classList.remove("hidden");
+    function iniciarJuego() {
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.classList.remove("hidden");
+
+      let chihuahua = { x: 50, y: 150, width: 40, height: 40, vy: 0, jumping: false };
+      let gravity = 1.5;
+      let obstacles = [];
+      let score = 0;
+      let gameOver = false;
+
+      function drawChihuahua() {
+        ctx.fillStyle = "#FFD7DC";
+        ctx.fillRect(chihuahua.x, chihuahua.y, chihuahua.width, chihuahua.height);
+      }
+
+      function drawObstacle(ob) {
+        ctx.fillStyle = "#ffaa66";
+        ctx.fillRect(ob.x, ob.y, ob.width, ob.height);
+        ctx.font = "18px Nunito";
+        ctx.fillStyle = "#fff";
+        ctx.fillText("🍄", ob.x + 5, ob.y - 5);
+      }
+
+      function update() {
+        if (gameOver) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        chihuahua.vy += gravity;
+        chihuahua.y += chihuahua.vy;
+
+        if (chihuahua.y > 150) {
+          chihuahua.y = 150;
+          chihuahua.vy = 0;
+          chihuahua.jumping = false;
+        }
+
+        drawChihuahua();
+
+        for (let ob of obstacles) {
+          ob.x -= 5;
+          drawObstacle(ob);
+
+          if (
+            chihuahua.x < ob.x + ob.width &&
+            chihuahua.x + chihuahua.width > ob.x &&
+            chihuahua.y < ob.y + ob.height &&
+            chihuahua.y + chihuahua.height > ob.y
+          ) {
+            gameOver = true;
+          }
+        }
+
+        ctx.fillStyle = "#fff";
+        ctx.font = "16px Nunito";
+        ctx.fillText("Puntos: " + score, 10, 20);
+
+        if (Math.random() < 0.02) {
+          obstacles.push({ x: canvas.width, y: 160, width: 30, height: 40 });
+        }
+
+        obstacles = obstacles.filter(ob => ob.x + ob.width > 0);
+        score++;
+
+        if (!gameOver) {
+          requestAnimationFrame(update);
+        } else {
+          ctx.fillStyle = "#ffbdbd";
+          ctx.font = "20px Nunito";
+          ctx.fillText("¡Ups! El chihuahua tropezó con un hongo 🍄", 200, 100);
+          ctx.fillText("Presiona R para reiniciar", 280, 130);
+        }
+      }
+
+      document.addEventListener("keydown", function(e) {
+        if (e.code === "Space" && !chihuahua.jumping) {
+          chihuahua.vy = -20;
+          chihuahua.jumping = true;
+        }
+        if (e.key.toLowerCase() === "r" && gameOver) {
+          chihuahua.y = 150;
+          chihuahua.vy = 0;
+          obstacles = [];
+          score = 0;
+          gameOver = false;
+          update();
+        }
+      });
+
+      update();
     }
 
-    document.addEventListener("keydown", function (e) {
+    // Easter eggs
+    document.addEventListener("keydown", function(e) {
       if (e.key.toLowerCase() === 'a') {
         const egg = document.getElementById("eggMensajeCuriosidad");
         if (egg) egg.style.display = "block";
       }
-      if (e.key.toLowerCase() === 'j') {
-        const chihuahua2 = document.getElementById("vistaChihuahua2");
-        if (chihuahua2) {
-          chihuahua2.classList.remove("hidden");
-          chihuahua2.style.animation = "fadeIn 2s ease-in-out";
-        }
+
+      if (e.key.toLowerCase() === 'g') {
+        const intro = document.getElementById("introJuegoChihuahua");
+        if (intro) intro.classList.add("hidden");
+        iniciarJuego();
       }
     });
   </script>
