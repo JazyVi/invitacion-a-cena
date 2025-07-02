@@ -96,6 +96,9 @@
   </div>
 
   <div class="message-box hidden" id="respuesta"></div>
+  <!-- Juego del Chihuahua Runner (aparece tras rechazar) -->
+  <canvas id="gameCanvas" width="800" height="200" class="hidden" style="margin-top: 2rem; border-radius: 1rem;"></canvas>
+
 
   <!-- Vista Chihuahua 2.0 (activa con la tecla J) -->
   <div id="vistaChihuahua2" class="hidden" style="margin-top: 2rem; background: rgba(34,40,49,0.6); padding: 2rem; border-radius: 1rem; max-width: 500px; animation: fadeIn 2s ease-in-out;">
@@ -136,6 +139,102 @@
       document.getElementById("step1").classList.add("hidden");
       document.getElementById("respuesta").innerHTML = "De lo que te pierdes 💔";
       document.getElementById("respuesta").classList.remove("hidden");
+
+      iniciarJuego(); // <-- activa el juego
+
+      function iniciarJuego() {
+  const canvas = document.getElementById("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.classList.remove("hidden");
+
+  let chihuahua = { x: 50, y: 150, width: 40, height: 40, vy: 0, jumping: false };
+  let gravity = 1.5;
+  let obstacles = [];
+  let score = 0;
+  let gameOver = false;
+
+  function drawChihuahua() {
+    ctx.fillStyle = "#FFD7DC";
+    ctx.fillRect(chihuahua.x, chihuahua.y, chihuahua.width, chihuahua.height);
+  }
+
+  function drawObstacle(ob) {
+    ctx.fillStyle = "#ffaa66";
+    ctx.fillRect(ob.x, ob.y, ob.width, ob.height);
+    ctx.font = "18px Nunito";
+    ctx.fillStyle = "#fff";
+    ctx.fillText("🍄", ob.x + 5, ob.y - 5);
+  }
+
+  function update() {
+    if (gameOver) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    chihuahua.vy += gravity;
+    chihuahua.y += chihuahua.vy;
+
+    if (chihuahua.y > 150) {
+      chihuahua.y = 150;
+      chihuahua.vy = 0;
+      chihuahua.jumping = false;
+    }
+
+    drawChihuahua();
+
+    for (let ob of obstacles) {
+      ob.x -= 5;
+      drawObstacle(ob);
+
+      if (
+        chihuahua.x < ob.x + ob.width &&
+        chihuahua.x + chihuahua.width > ob.x &&
+        chihuahua.y < ob.y + ob.height &&
+        chihuahua.y + chihuahua.height > ob.y
+      ) {
+        gameOver = true;
+      }
+    }
+
+    ctx.fillStyle = "#fff";
+    ctx.font = "16px Nunito";
+    ctx.fillText("Puntos: " + score, 10, 20);
+
+    if (Math.random() < 0.02) {
+      obstacles.push({ x: canvas.width, y: 160, width: 30, height: 40 });
+    }
+
+    obstacles = obstacles.filter(ob => ob.x + ob.width > 0);
+    score++;
+
+    if (!gameOver) {
+      requestAnimationFrame(update);
+    } else {
+      ctx.fillStyle = "#ffbdbd";
+      ctx.font = "20px Nunito";
+      ctx.fillText("¡Ups! El chihuahua tropezó con un hongo 🍄", 200, 100);
+      ctx.fillText("Presiona R para reiniciar", 280, 130);
+    }
+  }
+
+  document.addEventListener("keydown", function(e) {
+    if (e.code === "Space" && !chihuahua.jumping) {
+      chihuahua.vy = -20;
+      chihuahua.jumping = true;
+    }
+    if (e.key.toLowerCase() === "r" && gameOver) {
+      chihuahua.y = 150;
+      chihuahua.vy = 0;
+      obstacles = [];
+      score = 0;
+      gameOver = false;
+      update();
+    }
+  });
+
+  update();
+}
+
     }
 
     function seleccionarFecha(fecha) {
